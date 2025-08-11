@@ -8,11 +8,16 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Install on Mac/Linux/Windows
+    - name: Install on Linux/Windows
+      if: {{ runner.os }} != 'macOS'
       run: |
         pip3 install wheel setuptools
         pip3 install ninja --upgrade
       shell: bash
+    - name: Install on macOS
+      if: {{ runner.os }} == 'macOS'
+      run: |
+        brew install ninja
     - name: Fix path on Linux
       run: |
         echo "/home/runner/.local/bin" >> $GITHUB_PATH
